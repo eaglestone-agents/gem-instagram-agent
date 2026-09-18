@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: gem-instagram-agent
+    runtime: python
+    region: frankfurt
+    plan: starter                      # requis pour le disque persistant (SQLite) + service toujours allumé
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 8 --timeout 60
+    healthCheckPath: /
+    disk:
+      name: gem-ig-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      # Secrets — saisis dans l'interface Render (sync: false = Render les demande, jamais dans Git)
+      - key: PAGE_ACCESS_TOKEN
+        sync: false
+      - key: APP_SECRET
+        sync: false
+      - key: TELEGRAM_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
+      - key: STATS_KEY
+        sync: false
+      # Valeurs non secrètes
+      - key: WEBHOOK_VERIFY_TOKEN
+        value: gem-verify-2026
+      - key: BROCHURE_URL
+        value: https://gembyeaglestone.be/brochure
+      - key: TRIGGER_WORDS
+        value: brochure
+      - key: MEDIA_LANG_MAP
+        value: ""                      # à remplir avec les IDs des 3 ad sets FR/NL/EN (voir POUR-PAULINE.md)
+      - key: DEFAULT_LANG
+        value: EN                      # le post organique est en EN uniquement (un seul post, pas 3)
+      - key: DB_PATH
+        value: /var/data/gem_ig.db
