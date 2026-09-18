@@ -3,14 +3,10 @@ services:
     name: gem-instagram-agent
     runtime: python
     region: frankfurt
-    plan: starter                      # requis pour le disque persistant (SQLite) + service toujours allumé
+    plan: free                          # gratuit — pas de disque persistant (SQLite reset au redémarrage, voir app.py)
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 8 --timeout 60
     healthCheckPath: /
-    disk:
-      name: gem-ig-data
-      mountPath: /var/data
-      sizeGB: 1
     envVars:
       # Secrets — saisis dans l'interface Render (sync: false = Render les demande, jamais dans Git)
       - key: PAGE_ACCESS_TOKEN
@@ -35,4 +31,4 @@ services:
       - key: DEFAULT_LANG
         value: EN                      # le post organique est en EN uniquement (un seul post, pas 3)
       - key: DB_PATH
-        value: /var/data/gem_ig.db
+        value: gem_ig.db
