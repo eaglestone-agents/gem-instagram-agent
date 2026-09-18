@@ -23,7 +23,7 @@ services:
       - key: WEBHOOK_VERIFY_TOKEN
         value: gem-verify-2026
       - key: BROCHURE_URL
-        value: https://gembyeaglestone.be/brochure
+        value: https://www.gembyeaglestone.be/?download=gem-brochure-commerciale-10-02.pdf&id=1055
       - key: TRIGGER_WORDS
         value: brochure
       - key: MEDIA_LANG_MAP
